@@ -1,30 +1,100 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { registerSchema } from "./schema/yupSchema";
+import { registerSchema } from "../../schema/yupSchema";
+import { useRegisterMutation } from "./authApiSlice";
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleXmark,
+  faCircleExclamation,
+  faCheckCircle,
+} from "@fortawesome/free-solid-svg-icons";
 
 function Register() {
-  const { register, handleSubmit, formState } = useForm({
+  const [err, setErr] = useState("");
+  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
+  const { register, handleSubmit, watch, formState } = useForm({
     resolver: yupResolver(registerSchema),
   });
 
-  const { errors,isValid } = formState;
+  const { errors } = formState;
+  const email = watch("email");
+  const username = watch("username");
+  const password = watch("password");
+  const confirmPassword = watch("confirmPassword");
 
-  const onSubmit = (data) => {
-    console.log(errors)
-    console.log(isValid)
-    console.log(data);
+  useEffect(() => {
+    setSuccess("");
+    setErr("");
+  }, [email, username, password, confirmPassword]);
+
+  const [registerUser, { isLoading }] = useRegisterMutation();
+
+  const onSubmit = async (data) => {
+    try {
+      const res = await registerUser({
+        email: data.email,
+        username: data.username,
+        password: data.password,
+      }).unwrap();
+      setSuccess(res.message);
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    } catch (err) {
+      setErr(err.data.message);
+    }
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen grid place-content-center">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+    <div className="min-h-screen flex flex-1 flex-col justify-center px-6 lg:px-8 relative">
+      {err && (
+        <div
+          role="alert"
+          className=" bg-error rounded-2xl flex alert-error w-[300px] self-center absolute top-5 p-4 items-center gap-1"
+        >
+          <FontAwesomeIcon icon={faCircleExclamation} size="lg" />
+          <span className="flex-1 text-white">{err}</span>
+          <button
+            className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center"
+            onClick={() => setErr("")}
+          >
+            <FontAwesomeIcon icon={faCircleXmark} size="lg" />
+          </button>
+        </div>
+      )}
+      {success && (
+        <div
+          role="alert"
+          className="bg-success rounded-2xl flex alert-success w-[300px] self-center absolute top-5 p-4 items-center gap-1"
+        >
+          <FontAwesomeIcon icon={faCheckCircle} size="lg" />
+          <span className="flex-1 text-white">{success}</span>
+          <button
+            className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center"
+            onClick={() => setSuccess("")}
+          >
+            <FontAwesomeIcon icon={faCircleXmark} size="lg" />
+          </button>
+        </div>
+      )}
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
-          className="mx-auto h-10 w-auto"
-          src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+          className="mx-auto h-56"
+          src="/thumb-removebg-preview.png"
           alt="Your Company"
         />
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">
+        <h2 className="text-center text-2xl font-bold leading-9 tracking-tight">
           Sign up for an account
         </h2>
       </div>
