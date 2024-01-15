@@ -31,15 +31,6 @@ function ProductList() {
     const { ids } = products;
 
     content = ids.map((id) => {
-    //   const product = entities[id];
-      //   return (
-      //     <div key={id} className="card bordered shadow-lg">
-      //       <div className="card-body">
-      //         <h2 className="card-title">{product.title}</h2>
-      //         <p>{product.description}</p>
-      //       </div>
-      //     </div>
-      //   )
       return (
         <ProductListItem key={id} productId={id} />
       );
