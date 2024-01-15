@@ -3,7 +3,6 @@ import Public from "./components/Public";
 import Login from "./Features/Auth/Login";
 import PersistLogin from "./Features/Auth/PersistLogin";
 import Register from "./Features/Auth/Register";
-import RequireAuth from "./Features/Auth/RequireAuth";
 import Catalogue from "./components/Catalogue/Catalogue";
 import Categories from "./components/Catalogue/Categories";
 import ResetPassword from "./Features/Auth/ResetPassword";
@@ -22,11 +21,9 @@ function App() {
         </Route>
         <Route element={<PersistLogin />}>
           <Route element={<Prefetch />}>
-            {/* <Route element={<RequireAuth />}> */}
               <Route path="catalogue" element={<Catalogue />}>
                 <Route index element={<Categories />} />
               </Route>
-            {/* </Route> */}
           </Route>
         </Route>
       </Route>
