@@ -1,35 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Layout from "./components/Layout";
+import Public from "./components/Public";
+import Login from "./Features/Auth/Login";
+import PersistLogin from "./Features/Auth/PersistLogin";
+import Register from "./Features/Auth/Register";
+import RequireAuth from "./Features/Auth/RequireAuth";
+import Catalogue from "./components/Catalogue/Catalogue";
+import Categories from "./components/Catalogue/Categories";
+import ResetPassword from "./Features/Auth/ResetPassword";
+import Prefetch from "./Features/Auth/Prefetch";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Public />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="reset-password">
+          <Route path=":token" element={<ResetPassword />} />
+        </Route>
+        <Route element={<PersistLogin />}>
+          <Route element={<Prefetch />}>
+            {/* <Route element={<RequireAuth />}> */}
+              <Route path="catalogue" element={<Catalogue />}>
+                <Route index element={<Categories />} />
+              </Route>
+            {/* </Route> */}
+          </Route>
+        </Route>
+      </Route>
+    </Routes>
+  );
 }
 
-export default App
+export default App;
