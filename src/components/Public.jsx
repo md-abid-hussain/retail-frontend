@@ -5,7 +5,14 @@ const Navbar = () => (
       <a href="#" className="text-white text-2xl font-bold">
         RetailStore
       </a>
-      
+      <ul className="flex gap-4">
+        <li>
+          <Link to='/login' className="link">Login</Link>
+        </li>
+        <li>
+          <Link to='/register'  className="link">Register</Link>
+        </li>
+      </ul>
     </div>
   </nav>
 );
@@ -28,7 +35,6 @@ const HeroSection = () => (
 const FeaturedProducts = () => (
   <div className="container mx-auto mt-8 p-4">
     <h2 className="text-2xl font-bold mb-8">Featured Products</h2>
-    
   </div>
 );
 

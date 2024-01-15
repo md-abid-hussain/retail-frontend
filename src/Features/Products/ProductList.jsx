@@ -9,9 +9,9 @@ function ProductList() {
     isError,
     error,
   } = useGetProductsQuery("productList", {
-    // pollingInterval: 20000,
-    // refetchOnFocus: true,
-    // refetchOnMountOrArgChange: true,
+    pollingInterval: 20000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
   });
 
   let content;
